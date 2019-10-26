@@ -1,0 +1,57 @@
+<?php
+defined ('BASEPATH') OR exit('No direct script access allowed');
+
+Class Syarikat extends CI_Controller {
+
+	public function __construct()
+	{	
+	   parent::__construct();
+	   $this->load->model("Syarikat_model");
+	   $this->load->library('form_validation');
+	}
+
+	public function index()
+	{
+		$syarikat = new Syarikat_model;
+		$data['data'] = $syarikat->get_syarikat();
+		$this->load->view('admin/syarikat/list', $data);
+	}
+
+	public function syarikatid($syarikat_id) 
+	{
+		$syarikat = $this->db->get_where('syarikat', array('syarikat_id' => $syarikat_id))->row();
+		$this->load->view('admin/syarikat/syarikatid',array('syarikat'=>$syarikat));
+	}
+
+	public function add()
+	{
+		$syarikat = $this->syarikat_model;
+		$validation = $this->form_validation;
+		$validation->set_rules($syarikat->rules());
+
+		if ($validation->run()) {
+			$syarikat->save();
+			$this->session->set_flashdata('success', 'Rekod disimpan');
+		}
+
+		$this->load->view("admin/syarikat/add");
+	}
+
+	public function edit($syarikat_id) 
+	{
+		$syarikat = $this->db->get_where('syarikat', array('syarikat_id' => $syarikat_id))->row();
+		$this->load->view('admin/syarikat/edit',array('syarikat'=>$syarikat));
+	}
+
+
+	public function delete($id = null)
+	{
+		if (!isset($id)) show_404();
+
+		if ($this->syarikat_model->delete($id)) {
+			redirect(site_url('admin/syarikat'));
+		}
+	}
+}
+
+
