@@ -8,7 +8,8 @@ class Ejen extends CI_Controller {
 	   parent::__construct();
 	   $this->load->model('Ejen_model');
 	   $this->load->helper('url');
-	   $this->load->library('form_validation');
+       $this->load->library('form_validation');
+       $this->prefix_fieldname = 'ejen_';
 	}
 
 	public function index()
@@ -19,12 +20,13 @@ class Ejen extends CI_Controller {
 
 	public function get_ejen_by_id() {
         
-        $id = $this->input->post('ejen_id'); // value id belum dapat lg
+        $id = $this->input->post('id'); // value id belum dapat lg
         $data = $this->Ejen_model->get_by_id($id); 
           
         $arr = array('success' => false, 'data' => '');
-        if($data){
-        $arr = array('success' => true, 'data' => $data);
+        if($data)
+        {
+           $arr = array('success' => true, 'data' => $this->remove_prefix_field($data));
         }
         echo json_encode($arr);
     }
@@ -32,11 +34,26 @@ class Ejen extends CI_Controller {
     public function store()
     {
         $data = array(
-                // 'title' => $this->input->post('title'),
-                // 'product_code' => $this->input->post('product_code'),
-                // 'description' => $this->input->post('description'),
-                // 'created_at' => date('Y-m-d H:i:s'),
-            );
+            'mypestid' => $this->input->post('mypestid'),
+            //'kategori' => $this->input->post('kategori'),
+            'firstnama' => $this->input->post('firstnama'),
+            'lastnama' => $this->input->post('lastnama'),
+            'mykad' => $this->input->post('mykad'),
+            'jantina' => $this->input->post('jantina'),
+            'telefon' => $this->input->post('telefon'),
+            'emel' => $this->input->post('emel'),
+            'emel2' => $this->input->post('emel2'),
+            'alamat1' => $this->input->post('alamat1'),
+            'alamat2' => $this->input->post('alamat2'),
+            'bandar' => $this->input->post('bandar'),
+            'poskod' => $this->input->post('poskod'),
+            'negeri' => $this->input->post('negeri'),
+            'negara' => $this->input->post('negara'),
+            'syarikat' => $this->input->post('syarikat'),
+            'noroc' => $this->input->post('noroc'),
+            //'pgguna_id' => $this->input->post('pgguna_id'),
+            'tarikhdaftar' => date('Y-m-d H:i:s'),
+        );
          
         $status = false;
  
@@ -51,7 +68,8 @@ class Ejen extends CI_Controller {
         }
  
         $data = $this->Ejen_model->get_by_id($id);
- 
+        $data = $this->remove_prefix_field($data);
+
         echo json_encode(array("status" => $status , 'data' => $data));
     }
  
@@ -59,6 +77,25 @@ class Ejen extends CI_Controller {
     {
         $this->Ejen_model->delete();
         echo json_encode(array("status" => TRUE));
+    }
+
+    public function remove_prefix_field($data)
+    {
+        $data_form = array();
+        foreach($data as $key => $val)
+        {
+            $prefix = 'ejen_';
+            $str = $key;
+
+            if (substr($str, 0, strlen($prefix)) == $prefix) {
+                $str = substr($str, strlen($prefix));
+            } 
+
+            $data_form[$str] = $val;
+
+            
+        }    
+        return $data_form;
     }
 }
 
