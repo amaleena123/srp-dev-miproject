@@ -72,18 +72,14 @@ class Ejen extends CI_Controller {
     }
 
     public function delete() {
-        /* working but for delete record purpose
-         * $this->Ejen_model->delete();
-         */
-
-        $id = $this->input->post('id');
-        $status = $this->input->post('status'); //value at 3 only
-
-        if ($status == 3) {
-          $this->Ejen_model->delete();
+        if( !empty($this->input->post('ejen_id')) ){
+            if ($this->input->post('ejen_status') == 3) {
+              $effected_row = $this->Ejen_model->delete();
+            } 
+            echo json_encode(array ("status" => TRUE, "row_effected" => $effected_row));      
         }
-          echo json_encode(array ("status" => TRUE));
-
+        else
+            echo json_encode(array ("status" => FALSE));
     }
 
     public function remove_prefix_field($data) {

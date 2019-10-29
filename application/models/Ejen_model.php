@@ -36,20 +36,25 @@ class Ejen_model extends CI_Model {
         return $this->db->affected_rows();
     }
 
-    public function delete($status) {
-        $id = $this->input->post('ejen_id');
-        $status = $this->input->post('ejen_status');
-
-        $this->db->where('ejen_id', $id);
-        $this->db->update('ma_ejen', $this->add_prefix_fieldname($status));
+    public function delete() {
+        $where = array('ejen_id' => $this->input->post('ejen_id'));
+        $this->db->update('ma_ejen', array($this->prefix_field."status"=>"3"), $where); // array('ejen_status'=>"3")
+        return $this->db->affected_rows();
     }
 
+    /* Add Prefix "ejen_" into $data
+     * Meaning , $data is represent key => value
+     * Example : 
+     * firstnama => "Jon Doe" from form
+     * Then to make it table db readable to the fieldname;
+     * ejen_firstnama => "Jon Doe" 
+     */
+    
     public function add_prefix_fieldname($data) {
         $data_db = array();
         foreach($data as $key => $val){
             $data_db[$this->prefix_field.$key] = $val;
         }
-
         return $data_db;
     }
 }

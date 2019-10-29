@@ -346,6 +346,6 @@
   <?php $this->load->view("admin/_partials/modal.php") ?>
 
   <!-- Bootstrap core JavaScript-->
-  <?php $this->load->view("admin/_partials/js.php") ?>
+  <?php //$this->load->view("admin/_partials/js.php") <--- include file ni hanya letak dalam page Dashboard. Jangan letak sini nanti conflict dengan current jquery lib dalam Ejen ?> 
          </body>
          </html>
