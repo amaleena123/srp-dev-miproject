@@ -228,23 +228,19 @@
                            <div class="form-group">
                               <div class="row">
                                  <div class="col-md-6">
-                                    <div class="form-group">
                                        <label for="name" class="col-sm-2 control-label">MyPestID</label>
                                        <div class="col-sm-12">
                                           <input type="text" class="form-control" id="mypestid" name="mypestid" placeholder="Masukkan MyPestID" value="" maxlength="50" required="">
                                        </div>
-                                    </div>
                                  </div>
                                  <div class="col-md-6" id="ejen_is_kemaskini">
-                                    <div class="form-group">
-                                       <label for="name" class="col-sm-2 control-label">Status</label>
-                                       <div class="col-sm-12">
-                                          <select class="browser-default custom-select required" id="status" name="status">
-                                             <option selected value="">--Pilih Status--</option>
-                                             <option value="1">Aktif</option>
-                                             <option value="2">Tidak Aktif</option>
-                                          </select>
-                                       </div>
+                                    <label for="name" class="col-sm-2 control-label">Status</label>
+                                    <div class="col-sm-12">
+                                       <select class="browser-default custom-select required" id="status" name="status">
+                                          <option selected value="">--Pilih Status--</option>
+                                          <option value="1">Aktif</option>
+                                          <option value="2">Tidak Aktif</option>
+                                       </select>
                                     </div>
                                  </div>
                               </div>
