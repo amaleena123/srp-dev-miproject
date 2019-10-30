@@ -230,7 +230,18 @@
                                  <div class="col-md-6">
                                        <label for="name" class="col-sm-2 control-label">MyPestID</label>
                                        <div class="col-sm-12">
-                                          <input type="text" class="form-control" id="mypestid" name="mypestid" placeholder="Masukkan MyPestID" value="" maxlength="50" required="">
+                                           <?php
+                                          $fi_mypestid = array( // fi is form input.
+                                             'name' => 'mypestId',
+                                             'id' => 'mypestId',
+                                             'class' => 'form-control',
+                                             'placeholder' => 'Daftar MyPestId',
+                                             'maxlength'   => '15',
+                                             'value' => '',
+                                             'required' => 'required'
+                                          );
+                                          echo form_input($fi_mypestid); 
+                                          ?>
                                        </div>
                                  </div>
                                  <div class="col-md-6" id="ejen_is_kemaskini">
