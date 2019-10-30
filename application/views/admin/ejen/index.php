@@ -22,6 +22,7 @@
             $('#ejenForm').trigger("reset");
             $('#ejenCrudModal').html("Tambah Ejen Baru");
             $('#ajax-ejen-modal').modal('show');
+            $("#ejen_is_kemaskini").hide();
          });
 
          <?php /* When user click kemaskini user */ ?>
@@ -54,8 +55,9 @@
          });
 
          if ($("#ejenForm").length > 0) {
+                        
             $("#ejenForm").validate({
-
+ 
                submitHandler: function (form) {
 
                   var actionType = $('#btn-save').val();
@@ -68,8 +70,14 @@
                      type: "POST",
                      dataType: 'json',
                      success: function (res) {
+                        var ejenprofile_status = '';
+                        
+                        if(res.data.status == 1 )
+                           ejenprofile_status='Aktif';
+                        if(res.data.status == 2 )
+                           ejenprofile_status='Tidak Aktif';
 
-                        var ejen = '<td>' + res.data.id + '</td><td>' + res.data.firstnama+' '+res.data.lastnama+ '</td><td>' + res.data.syarikat + '</td><td>' + res.data.negeri + '</td>';
+                        var ejen = '<td>' + res.data.id + '</td><td>' + res.data.firstnama+' '+res.data.lastnama+ '</td><td>' + res.data.syarikat + '</td><td>' + ejenprofile_status + '</td><td>' + res.data.negeri + '</td>';
                         ejen += '<td><a href="javascript:void(0)" id="edit-ejen" data-id="' + res.data.id + '" class="btn btn-info edit-ejen-row">Kemaskini</a> ';
                         ejen += '<a href="javascript:void(0)" id="delete-ejen" data-id="' + res.data.id + '" data-id="' + res.data.status + '" class="btn btn-danger delete-user">Hapus</a></td>';
 
@@ -79,6 +87,7 @@
                            $("#ejen_id_" + res.data.id).html(ejen);
                         }
 
+                        $("#ejen_is_kemaskini").show();
                         $('#ejenForm').trigger("reset");
                         $('#ajax-ejen-modal').modal('hide');
                         $('#btn-save').html('Save Changes');
@@ -122,6 +131,8 @@
                      $("#"+val).val(res.data[val]);
                   });
                }
+               
+               $("ejen_is_kemaskini").show();
             },
             error: function (data) {
                console.log('Error:', data);
@@ -186,7 +197,8 @@
                                  <?php 
                                  if ($ejen->ejen_status == 1) {
                                     echo "Aktif"; 
-                                 } else {
+                                 } 
+                                 if ($ejen->ejen_status == 2) {
                                     echo "Tidak Aktif";
                                  }
                                  ?>
@@ -214,9 +226,27 @@
                         <form id="ejenForm" name="ejenForm" class="form-horizontal">
                            <input type="hidden" name="ejen_id" id="ejen_id">
                            <div class="form-group">
-                              <label for="name" class="col-sm-2 control-label">MyPestID</label>
-                              <div class="col-sm-12">
-                                 <input type="text" class="form-control" id="mypestid" name="mypestid" placeholder="Masukkan MyPestID" value="" maxlength="50" required="">
+                              <div class="row">
+                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                       <label for="name" class="col-sm-2 control-label">MyPestID</label>
+                                       <div class="col-sm-12">
+                                          <input type="text" class="form-control" id="mypestid" name="mypestid" placeholder="Masukkan MyPestID" value="" maxlength="50" required="">
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6" id="ejen_is_kemaskini">
+                                    <div class="form-group">
+                                       <label for="name" class="col-sm-2 control-label">Status</label>
+                                       <div class="col-sm-12">
+                                          <select class="browser-default custom-select required" id="status" name="status">
+                                             <option selected value="">--Pilih Status--</option>
+                                             <option value="1">Aktif</option>
+                                             <option value="2">Tidak Aktif</option>
+                                          </select>
+                                       </div>
+                                    </div>
+                                 </div>
                               </div>
                            </div>
                            <div class="form-group">

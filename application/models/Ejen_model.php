@@ -26,6 +26,7 @@ class Ejen_model extends CI_Model {
     }
     
     public function create($data) {
+        $data['status']='1';
         $this->db->insert('ma_ejen', $this->add_prefix_fieldname($data));
         return $this->db->insert_id();
     }
