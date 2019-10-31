@@ -30,6 +30,11 @@
             ajax_edit_form($(this));
          });
 
+         <?php /* When user click butiran user */ ?>
+         $('body').on('click', '.show-ejen-row', function () {
+            ajax_show_detail($(this));
+         });
+
          $('body').on('click', '#delete-ejen', function () {
 
             var ejen_id = $(this).data("id");
@@ -103,6 +108,65 @@
 
 
    //functions
+   function ajax_show_detail(elem){
+      var ejen_id = elem.data("id");
+
+      $.ajax({
+         type: "POST",
+         url: SITEURL + "admin/ejen/get_ejen_by_id",
+         data: {
+            id: ejen_id
+         },
+         dataType: "json",
+         success: function (res) {
+            if (res.success == true) {
+                  var ejenprofile_status = '';
+                  var ejenprofile_gender = '';
+                  $('#ejenCrudModal').html("Butiran Ejen");
+                  $('#btn-save').hide();
+                  $('#ajax-ejen-modal').modal('show');
+                  $('#ejen_id').val(res.data.id);
+ 
+                  var fieldform = [ "mypestid", "kategori", "firstnama", "lastnama", "mykad", "jantina", "telefon", "emel", "emel2", "alamat1", "alamat2", "bandar", "poskod", "negeri", "negara", "syarikat", "noroc","status"];
+                  $.each( fieldform, function( i, val ){
+                     if(val=='status')
+                     {
+                        if(res.data[val] == 1 )
+                           ejenprofile_status='Aktif';
+                        if(res.data[val] == 2 )
+                           ejenprofile_status='Tidak Aktif';
+      
+                        $("select[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+ejenprofile_status+"</div>");
+                     
+                     }
+                     else if(val=='jantina')
+                     {
+                        if(res.data[val] == 'M' )
+                           ejenprofile_gender='Lelaki';
+                        if(res.data[val] == 'F' )
+                           ejenprofile_gender='Perempuan';
+
+                        /* $("select[name='"+val+"'")
+                        .attr({'disabled':'true'})
+                        .val(res.data[val]); */
+
+                        $("select[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+ejenprofile_gender+"</div>");
+                     }
+                     else{
+
+                        /* $("input[name='"+val+"'")
+                        .attr({'readonly':'true'})
+                        .val(res.data[val]); */
+                     
+                        $("input[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+res.data[val]+"</div>");
+                     }
+
+
+                  });
+            }
+         } 
+      });
+   }
    function ajax_edit_form(elem){
       var ejen_id = elem.data("id"); 
       
@@ -205,6 +269,7 @@
                               </td>
                               <td><?php echo $ejen->ejen_negeri;?></td>
                               <td>
+                                 <a href="javascript:void(0)" id="show-ejen" data-id="<?php echo $ejen->ejen_id;?>" class="btn btn-info show-ejen-row">Butiran</a>
                                  <a href="javascript:void(0)" id="edit-ejen" data-id="<?php echo $ejen->ejen_id;?>" class="btn btn-info edit-ejen-row">Kemaskini</a>
                                  <a href="javascript:void(0)" id="delete-ejen" data-id="<?php echo $ejen->ejen_id;?>" data-firstnama="<?php echo $ejen->ejen_firstnama;?>" data-status="3" class="btn btn-danger delete-user">Hapus</a>
                               </td>
@@ -290,7 +355,7 @@
                               </div>
                            </div>
                            <div class="form-group">
-                              <label for="name" class="col-sm-12 control-label">Email 2</label>
+                              <label for="name" class="col-sm-12 control-label">Emel 2</label>
                               <div class="col-sm-12">
                                  <input type="text" class="form-control" id="emel2" name="emel2" placeholder="Masukkan Emel 2" value="" maxlength="50" required="">
                               </div>
