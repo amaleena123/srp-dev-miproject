@@ -206,7 +206,7 @@
                   });
                }
                
-               $("ejen_is_kemaskini").show();
+               $("#ejen_is_kemaskini").show();
             },
             error: function (data) {
                console.log('Error:', data);
