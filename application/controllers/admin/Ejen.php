@@ -72,6 +72,7 @@ class Ejen extends CI_Controller {
     }
 
     public function delete() {
+        $effected_row = 0;
         if( !empty($this->input->post('ejen_id')) ){
             if ($this->input->post('ejen_status') == 3) {
               $effected_row = $this->Ejen_model->delete();

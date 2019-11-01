@@ -38,15 +38,15 @@
          $('body').on('click', '#delete-ejen', function () {
 
             var ejen_id = $(this).data("id");
-            var ejen_firstnama = $(this).data("firstnama");
-            var ejen_status = $(this).data("status"); //ye ke?
-            if (confirm("Hapus Rekod "+ejen_firstnama+"?")) {
+            var ejen_fullname = $(this).data("fullname");
+         
+            if (confirm("Hapus Rekod '"+ejen_fullname+"'?")) {
                $.ajax( {
                   type: "POST",
                   url: SITEURL + "admin/ejen/delete",
                   data: {
                      ejen_id: ejen_id,
-                     ejen_status: ejen_status
+                     ejen_status: 3
                   },
                   dataType: "json",
                   success: function (data) {
@@ -85,7 +85,7 @@
                         var ejen = '<td>' + res.data.id + '</td><td>' + res.data.firstnama+' '+res.data.lastnama+ '</td><td>' + res.data.syarikat + '</td><td>' + ejenprofile_status + '</td><td>' + res.data.negeri + '</td>';
                         ejen += '<td><a href="javascript:void(0)" id="show-ejen" data-id="' + res.data.id + '" class="btn btn-info show-ejen-row">Butiran</a> ';
                         ejen += '<a href="javascript:void(0)" id="edit-ejen" data-id="' + res.data.id + '" class="btn btn-info edit-ejen-row">Kemaskini</a> ';
-                        ejen += '<a href="javascript:void(0)" id="delete-ejen" data-id="' + res.data.id + '" data-id="' + res.data.status + '" class="btn btn-danger delete-user">Hapus</a></td>';
+                        ejen += '<a href="javascript:void(0)" id="delete-ejen" data-id="' + res.data.id + '" data-id="' + res.data.status + '"  data-fullname="' + res.data.firstnama +" "+ res.data.lastnama  +'"class="btn btn-danger delete-user">Hapus</a></td>';
 
                         if (actionType == "create-ejen") {
                            $('#ejen_list').prepend(ejen);
@@ -134,7 +134,7 @@
                   var ejenprofile_gender = '';
                   
                   var this_modal_elems  = '#ajax-ejen-modal-2 > .modal-dialog > .modal-content > .modal-body'; 
-                  $('#ejenCrudModal').html("Butiran Ejen");
+                  $('#ajax-ejen-modal-2 #ejenCrudModal').html("Butiran Ejen");
                   $(this_modal_elems+' #btn-save').hide();
                   $('#ajax-ejen-modal-2').modal('show');
                   $('#ejen_id').val(res.data.id);
@@ -194,7 +194,7 @@
                   $('#title-error').hide();
                   $('#ejen_code-error').hide();
                   $('#description-error').hide();
-                  $('#ejenCrudModal').html("Edit ejen");
+                  $('#ejenCrudModal').html("Kemaskini Ejen");
                   $('#btn-save').val("edit-ejen");
                   $('#ajax-ejen-modal').modal('show');
                   $('#ejen_id').val(res.data.id);
@@ -281,7 +281,7 @@
                               <td>
                                  <a href="javascript:void(0)" id="show-ejen" data-id="<?php echo $ejen->ejen_id;?>" class="btn btn-info show-ejen-row">Butiran</a>
                                  <a href="javascript:void(0)" id="edit-ejen" data-id="<?php echo $ejen->ejen_id;?>" class="btn btn-info edit-ejen-row">Kemaskini</a>
-                                 <a href="javascript:void(0)" id="delete-ejen" data-id="<?php echo $ejen->ejen_id;?>" data-firstnama="<?php echo $ejen->ejen_firstnama;?>" data-status="3" class="btn btn-danger delete-user">Hapus</a>
+                                 <a href="javascript:void(0)" id="delete-ejen" data-id="<?php echo $ejen->ejen_id;?>" data-fullname="<?php echo $ejen->ejen_firstnama.' '.$ejen->ejen_lastnama;?>" class="btn btn-danger delete-user">Hapus</a>
                               </td>
                            </tr>
                         <?php endforeach;?>
