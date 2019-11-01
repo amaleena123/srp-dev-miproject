@@ -134,7 +134,7 @@
                   var ejenprofile_gender = '';
                   
                   var this_modal_elems  = '#ajax-ejen-modal-2 > .modal-dialog > .modal-content > .modal-body'; 
-                  $('#ajax-ejen-modal-2 #ejenCrudModal').html("Butiran Ejen");
+                  $('#ajax-ejen-modal-2 #ejenCrudModal').html("<b>Butiran Ejen ID:"+res.data.id+"</b>");
                   $(this_modal_elems+' #btn-save').hide();
                   $('#ajax-ejen-modal-2').modal('show');
                   $('#ejen_id').val(res.data.id);
@@ -194,7 +194,7 @@
                   $('#title-error').hide();
                   $('#ejen_code-error').hide();
                   $('#description-error').hide();
-                  $('#ejenCrudModal').html("Kemaskini Ejen");
+                  $('#ejenCrudModal').html("<b>Kemaskini Ejen ID:"+res.data.id+"</b>");
                   $('#btn-save').val("edit-ejen");
                   $('#ajax-ejen-modal').modal('show');
                   $('#ejen_id').val(res.data.id);
