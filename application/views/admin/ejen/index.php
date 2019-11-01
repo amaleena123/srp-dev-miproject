@@ -83,7 +83,8 @@
                            ejenprofile_status='Tidak Aktif';
 
                         var ejen = '<td>' + res.data.id + '</td><td>' + res.data.firstnama+' '+res.data.lastnama+ '</td><td>' + res.data.syarikat + '</td><td>' + ejenprofile_status + '</td><td>' + res.data.negeri + '</td>';
-                        ejen += '<td><a href="javascript:void(0)" id="edit-ejen" data-id="' + res.data.id + '" class="btn btn-info edit-ejen-row">Kemaskini</a> ';
+                        ejen += '<td><a href="javascript:void(0)" id="show-ejen" data-id="' + res.data.id + '" class="btn btn-info show-ejen-row">Butiran</a> ';
+                        ejen += '<a href="javascript:void(0)" id="edit-ejen" data-id="' + res.data.id + '" class="btn btn-info edit-ejen-row">Kemaskini</a> ';
                         ejen += '<a href="javascript:void(0)" id="delete-ejen" data-id="' + res.data.id + '" data-id="' + res.data.status + '" class="btn btn-danger delete-user">Hapus</a></td>';
 
                         if (actionType == "create-ejen") {
@@ -110,7 +111,16 @@
    //functions
    function ajax_show_detail(elem){
       var ejen_id = elem.data("id");
-
+            
+      <?php /* Make sure #clone-modal-form is empty each time click this */?>
+      $("#clone-modal-form").empty(); 
+      
+      <?php /* Process cloning the form into #clone-modal-form  */?>
+      $("#ajax-ejen-modal").clone().appendTo("#clone-modal-form");
+      $("#clone-modal-form > #ajax-ejen-modal").attr({"id":"ajax-ejen-modal-2"});
+      $("#ajax-ejen-modal-2").find("form").remove();
+      $("#ajax-ejen-modal").find("form").children().clone().appendTo("#ajax-ejen-modal-2 > .modal-dialog > .modal-content > .modal-body");
+      
       $.ajax({
          type: "POST",
          url: SITEURL + "admin/ejen/get_ejen_by_id",
@@ -122,9 +132,11 @@
             if (res.success == true) {
                   var ejenprofile_status = '';
                   var ejenprofile_gender = '';
+                  
+                  var this_modal_elems  = '#ajax-ejen-modal-2 > .modal-dialog > .modal-content > .modal-body'; 
                   $('#ejenCrudModal').html("Butiran Ejen");
-                  $('#btn-save').hide();
-                  $('#ajax-ejen-modal').modal('show');
+                  $(this_modal_elems+' #btn-save').hide();
+                  $('#ajax-ejen-modal-2').modal('show');
                   $('#ejen_id').val(res.data.id);
  
                   var fieldform = [ "mypestid", "kategori", "firstnama", "lastnama", "mykad", "jantina", "telefon", "emel", "emel2", "alamat1", "alamat2", "bandar", "poskod", "negeri", "negara", "syarikat", "noroc","status"];
@@ -136,7 +148,7 @@
                         if(res.data[val] == 2 )
                            ejenprofile_status='Tidak Aktif';
       
-                        $("select[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+ejenprofile_status+"</div>");
+                        $(this_modal_elems+" select[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+ejenprofile_status+"</div>");
                      
                      }
                      else if(val=='jantina')
@@ -150,7 +162,7 @@
                         .attr({'disabled':'true'})
                         .val(res.data[val]); */
 
-                        $("select[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+ejenprofile_gender+"</div>");
+                        $(this_modal_elems+" select[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+ejenprofile_gender+"</div>");
                      }
                      else{
 
@@ -158,7 +170,7 @@
                         .attr({'readonly':'true'})
                         .val(res.data[val]); */
                      
-                        $("input[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+res.data[val]+"</div>");
+                        $(this_modal_elems+" input[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+res.data[val]+"</div>");
                      }
 
 
@@ -178,8 +190,6 @@
             },
             dataType: "json",
             success: function (res) {
-
-               console.log(res);
                if (res.success == true) {
                   $('#title-error').hide();
                   $('#ejen_code-error').hide();
@@ -427,6 +437,9 @@
                   </div>
                </div>
             </div>
+            
+            <div id="clone-modal-form"></div>
+
 
               <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
