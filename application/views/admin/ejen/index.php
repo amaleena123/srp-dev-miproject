@@ -119,7 +119,7 @@
       $("#ajax-ejen-modal").clone().appendTo("#clone-modal-form");
       $("#clone-modal-form > #ajax-ejen-modal").attr({"id":"ajax-ejen-modal-2"});
       $("#ajax-ejen-modal-2").find("form").remove();
-      $("#ajax-ejen-modal").find("form").children().clone().appendTo("#ajax-ejen-modal-2 > .modal-dialog > .modal-content > .modal-body");
+      //$("#ajax-ejen-modal").find("form").children().clone().appendTo("#ajax-ejen-modal-2 > .modal-dialog > .modal-content > .modal-body");
       
       $.ajax({
          type: "POST",
@@ -130,55 +130,78 @@
          dataType: "json",
          success: function (res) {
             if (res.success == true) {
-                  var ejenprofile_status = '';
-                  var ejenprofile_gender = '';
-                  
-                  var this_modal_elems  = '#ajax-ejen-modal-2 > .modal-dialog > .modal-content > .modal-body'; 
-                  $('#ajax-ejen-modal-2 #ejenCrudModal').html("<b>Butiran Ejen ID:"+res.data.id+"</b>");
-                  $(this_modal_elems+' #btn-save').hide();
-                  $('#ajax-ejen-modal-2').modal('show');
-                  $('#ejen_id').val(res.data.id);
- 
-                  var fieldform = [ "mypestid", "kategori", "firstnama", "lastnama", "mykad", "jantina", "telefon", "emel", "emel2", "alamat1", "alamat2", "bandar", "poskod", "negeri", "negara", "syarikat", "noroc","status"];
-                  $.each( fieldform, function( i, val ){
-                     if(val=='status')
-                     {
-                        if(res.data[val] == 1 )
-                           ejenprofile_status='Aktif';
-                        if(res.data[val] == 2 )
-                           ejenprofile_status='Tidak Aktif';
-      
-                        $(this_modal_elems+" select[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+ejenprofile_status+"</div>");
-                     
-                     }
-                     else if(val=='jantina')
-                     {
-                        if(res.data[val] == 'M' )
-                           ejenprofile_gender='Lelaki';
-                        if(res.data[val] == 'F' )
-                           ejenprofile_gender='Perempuan';
+               var ejenprofile_status = '';
+               var ejenprofile_gender = '';
+               
+               var this_modal_elems  = '#ajax-ejen-modal-2 > .modal-dialog > .modal-content > .modal-body'; 
+               $('#ajax-ejen-modal-2 #ejenCrudModal').html("Butiran Ejen");
+               $(this_modal_elems+' #btn-save').hide();
+               $('#ajax-ejen-modal-2').modal('show');
+               $('#ejen_id').val(res.data.id);
 
-                        /* $("select[name='"+val+"'")
-                        .attr({'disabled':'true'})
-                        .val(res.data[val]); */
+               <?php /* Tambah butang Print */?>
+               $('#ajax-ejen-modal-2 > .modal-dialog > .modal-content > .modal-footer').append("<button type='button' class='btn btn-info' id='btn-print'>Cetak</button>");
 
-                        $(this_modal_elems+" select[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+ejenprofile_gender+"</div>");
-                     }
-                     else{
+               var fieldform = {
+                  "mypestid" : "MyPestID", 
+                  "status" : "Status",
+                  "kategori" : "Kategori", 
+                  "firstnama" : "Firstname", 
+                  "lastnama" : "Lastname", 
+                  "mykad" : "My Kad", 
+                  "jantina" : "Jantina", 
+                  "telefon" : "Telefon", 
+                  "emel" : "Emel", 
+                  "emel2" : "Emel2", 
+                  "syarikat" : "Syarikat", 
+                  "noroc" : "No ROC",
+                  "alamat1" : "Alamat1",
+                  "alamat2" : "Alamat2", 
+                  "bandar" : "Bandar", 
+                  "poskod" : "Poskod", 
+                  "negeri" : "Negeri", 
+                  "negara" : "Negara", 
+               };
 
-                        /* $("input[name='"+val+"'")
-                        .attr({'readonly':'true'})
-                        .val(res.data[val]); */
-                     
-                        $(this_modal_elems+" input[name='"+val+"'").replaceWith("<div style='border-top:1px solid #CCC'>"+res.data[val]+"</div>");
-                     }
+               var newtable = '';
+               newtable = "<table id='ejen-detail-view'>";
+               $.each( fieldform, function( val, label ){
+                  if(val=='status')
+                  {
+                     if(res.data[val] == 1 )
+                        ejenprofile_status='Aktif';
+                     if(res.data[val] == 2 )
+                        ejenprofile_status='Tidak Aktif';
+                     newtable += "<tr><td class='td1-col'><b>" + label + "</b></td><td>" + ejenprofile_status + "</td></tr>";
+                  }
+                  else if(val=='jantina')
+                  {
+                     if(res.data[val] == 'M' )
+                        ejenprofile_gender='Lelaki';
+                     if(res.data[val] == 'F' )
+                        ejenprofile_gender='Perempuan';
+                     newtable += "<tr><td class='td1-col'><b>" + label + "</b></td><td>" + ejenprofile_gender + "</td></tr>";
+                  }
+                  else{
+                     newtable += "<tr><td class='td1-col'><b>" + label + "</b></td><td>" + res.data[val] + "</td></tr>";
+                  }
+               });
+               newtable += "</table>";
 
+               $(this_modal_elems).html(newtable);
+               $('#ejen-detail-view .td1-col').attr({'width':'150'});
 
+               $("#btn-print").on('click', function(){
+                  $(this_modal_elems).printThis({
+                     header: "Butiran Ejen",
+                     footer: "Dicetak Pada : <?php echo date("Y-m-d H:i:s") ?>"
                   });
+               });
             }
          } 
       });
    }
+   
    function ajax_edit_form(elem){
       var ejen_id = elem.data("id"); 
       
@@ -194,7 +217,7 @@
                   $('#title-error').hide();
                   $('#ejen_code-error').hide();
                   $('#description-error').hide();
-                  $('#ejenCrudModal').html("<b>Kemaskini Ejen ID:"+res.data.id+"</b>");
+                  $('#ejenCrudModal').html("Kemaskini Ejen");
                   $('#btn-save').val("edit-ejen");
                   $('#ajax-ejen-modal').modal('show');
                   $('#ejen_id').val(res.data.id);
@@ -291,6 +314,7 @@
             </div>
 
             <!-- Model for add edit ejen -->
+            <?php /*Butiran Ejen adalah clone dari #ajax-ejen-modal*/ ?>
             <div class="modal fade" id="ajax-ejen-modal" aria-hidden="true">
                <div class="modal-dialog">
                   <div class="modal-content">
@@ -318,6 +342,18 @@
                                        </select>
                                     </div>
                                  </div>
+                              </div>
+                           </div>
+                           <div class="form-group">
+                              <label for="name" class="col-sm-2 control-label">Kategori</label>
+                              <div class="col-sm-12">
+                                 <select class="browser-default custom-select required" id="kategori" name="kategori">
+                                    <option selected value="">--Pilih Status--</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+
+                                 </select>
                               </div>
                            </div>
                            <div class="form-group">
