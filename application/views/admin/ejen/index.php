@@ -289,7 +289,7 @@
                   </tbody>
                </table>
             </div>
-
+<div id="printableArea">
             <!-- Model for add edit ejen -->
             <div class="modal fade" id="ajax-ejen-modal" aria-hidden="true">
                <div class="modal-dialog">
@@ -429,6 +429,8 @@
                            <div class="col-sm-offset-2 col-sm-10">
                               <button type="submit" class="btn btn-primary" id="btn-save" value="create">Save changes
                               </button>
+										<button type="button" class="btn btn-info" id="btn-print" onclick="printDiv('printableArea')">
+                  </button>
                            </div>
                         </form>
                      </div>
@@ -439,6 +441,19 @@
             </div>
             
             <div id="clone-modal-form"></div>
+			</div>
+			<script type="text/javascript">
+   function printDiv(printableArea) {
+     var printContents = document.getElementById(printableArea).innerHTML;
+     var originalContents = document.body.innerHTML;
+
+     document.body.innerHTML = printContents;
+     window.print();
+     document.body.innerHTML = originalContents;
+     location.reload(true);
+     // $('#ajax-ejen-modal-2').modal('hide');
+}
+</script>
 
 
               <!-- Scroll to Top Button-->
